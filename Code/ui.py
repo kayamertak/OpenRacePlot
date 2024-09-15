@@ -386,11 +386,22 @@ class OpenRacePlot:
         self.plot_areas = [(self.fig, ax, self.canvas, self.toolbar) for ax in self.axes]
 
     def on_mouse_press(self, event):
-        """Handle mouse press events for panning."""
-        if event.button == 2:  # Middle mouse button (mouse wheel button)
+        """Handle mouse press events for panning and right-click context menu."""
+        if event.button == 2:  # Middle mouse button (scroll wheel button)
             self.panning = True  # Start panning
             self.x_press = event.x
             self.y_press = event.y
+            print("Middle mouse button pressed, starting panning")
+        
+        elif event.button == 3:  # Right mouse button (context menu)
+            # Find which axis (ax) the event occurred in
+            if event.inaxes:  # Check if the event occurred inside any axes
+                ax = event.inaxes  # Get the axis where the click happened
+                # Call the right-click handler and pass the event and axis
+                self.on_right_click(event, ax)
+            else:
+                print("Right click occurred outside any axes")
+
 
     def on_mouse_move(self, event):
         """Handle mouse motion to enable pixel-based panning."""
@@ -464,7 +475,7 @@ class OpenRacePlot:
         """Handle right-click events to show a context menu based on the number of lines in the plot."""
         if event.button == 3 and event.inaxes == ax:  # Check if right-click occurred inside the axis
             lines = ax.get_lines()  # Get all lines in the current plot
-            
+
             # Check if there is more than one line in the plot
             if len(lines) > 1:
                 # If more than one line, show options to choose between lines
@@ -492,7 +503,7 @@ class OpenRacePlot:
             
             # Display the menu at the mouse position
             menu.post(menu_x, menu_y)
-
+            
     def change_line_width(self, line):
         """Prompt the user to change the line width for the selected line."""
         new_width = simpledialog.askfloat("Change Line Width", "Enter new line width:", minvalue=0.1, maxvalue=10.0)
