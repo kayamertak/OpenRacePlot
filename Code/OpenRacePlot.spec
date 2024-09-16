@@ -35,5 +35,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['C:\\Users\\mcwar\\Desktop\\Kaya\\Data_Vis_Software\\Others\\OpenRacePlot.ico'],
+    icon=['C:\\Users\\mcwar\\Desktop\\Kaya\\Data_Vis_Software\\Others\\OpenRacePlot_Icon.ico'],
 )

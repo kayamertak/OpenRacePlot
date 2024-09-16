@@ -8,6 +8,8 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolb
 from matplotlib.ticker import MaxNLocator
 import matplotlib.patches as patches
 import random
+import os
+import sys
 
 from data_import import import_data
 from plotting import plot_3d_data, plot_data, add_plot, erase_plot, reset_plots, plot_track_report, plot_scatter_data, plot_histogram_data
@@ -21,7 +23,14 @@ class OpenRacePlot:
         self.apply_alt_theme()
 
         self.current_theme = 'black'
-        self.root.iconbitmap("C:/Users/mcwar/Desktop/Kaya/Data_Vis_Software/Others/OpenRacePlot.ico")
+        #self.root.iconbitmap("C:/Users/mcwar/Desktop/Kaya/Data_Vis_Software/Others/OpenRacePlot_Icon.ico")
+        icon_path = self.resource_path("C:/Users/mcwar/Desktop/Kaya/Data_Vis_Software/Others/OpenRacePlot_Icon.ico")
+
+        if os.path.exists(icon_path):
+            self.root.iconbitmap(icon_path)
+        else:
+            print("Icon file not found, proceeding without an icon.")
+        
         self.dataframes = []
         self.dataset_names = []
         self.dataset_colors = []
@@ -60,6 +69,18 @@ class OpenRacePlot:
         self.original_ylim = []  # Store original Y limits for each axis
         self.panning = False  # Ensure panning and zooming don't conflict
     
+
+
+    def resource_path(self, relative_path):
+        """ Get the absolute path to resource, works for dev and for PyInstaller. """
+        try:
+            # PyInstaller creates a temp folder and stores path in _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+        
+        return os.path.join(base_path, relative_path)
+
     def synchronize_crosshair(self, event):
         """Synchronize crosshair line across all plots and track its position."""
         try:
